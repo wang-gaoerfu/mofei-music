@@ -6,6 +6,7 @@ from datetime import datetime
 from app.core.database import get_session
 from app.models.database import User
 from app.core.config import settings
+from app.core.auth import get_current_user
 from jose import jwt
 
 router = APIRouter()
@@ -20,6 +21,10 @@ class LoginResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: dict
+
+
+class UpdateUserRequest(BaseModel):
+    nickname: str = ""
 
 
 def create_access_token(data: dict) -> str:
@@ -70,6 +75,31 @@ def register(req: RegisterRequest, session: Session = Depends(get_session)):
 
 
 @router.get("/info")
-def get_user_info(session: Session = Depends(get_session)):
-    # TODO: 从 token 获取 user_id
-    return {"message": "需要认证"}
+def get_user_info(current_user: User = Depends(get_current_user)):
+    return {
+        "id": current_user.id,
+        "openid": current_user.openid,
+        "nickname": current_user.nickname,
+        "free_count": current_user.free_count,
+        "balance": current_user.balance,
+        "created_at": current_user.created_at
+    }
+
+
+@router.put("/update")
+def update_user(
+    req: UpdateUserRequest,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    if req.nickname:
+        current_user.nickname = req.nickname
+    current_user.updated_at = datetime.now()
+    session.commit()
+    session.refresh(current_user)
+    return {
+        "id": current_user.id,
+        "nickname": current_user.nickname,
+        "free_count": current_user.free_count,
+        "balance": current_user.balance
+    }
