@@ -1,0 +1,108 @@
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-bg"></view>
+    <view class="user-content">
+      <view class="user-avatar">
+        <text class="avatar-icon">{{userInfo.nickname ? userInfo.nickname[0].toUpperCase() : 'U'}}</text>
+      </view>
+      <view class="user-detail">
+        <text class="user-name">{{userInfo.nickname || '游客用户'}}</text>
+        <text class="user-id">ID: {{userInfo.id || '--'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 创作次数 -->
+  <view class="credits-card">
+    <view class="credit-item">
+      <text class="credit-num">{{userInfo.free_count || 0}}</text>
+      <text class="credit-label">免费次数</text>
+    </view>
+    <view class="credit-divider"></view>
+    <view class="credit-item">
+      <text class="credit-num">{{userInfo.balance || 0}}</text>
+      <text class="credit-label">余额</text>
+    </view>
+    <view class="credit-divider"></view>
+    <view class="credit-item">
+      <text class="credit-num">{{totalCredits}}</text>
+      <text class="credit-label">总计可用</text>
+    </view>
+  </view>
+
+  <!-- 充值套餐 -->
+  <view class="section recharge-section">
+    <view class="section-header">
+      <text class="section-title">充值套餐</text>
+      <text class="section-hint">更多次数更低价格</text>
+    </view>
+    <view class="package-grid">
+      <view
+        wx:for="{{rechargePackages}}"
+        wx:key="amount"
+        class="package-item {{selectedPackage === item.amount ? 'selected' : ''}}"
+        bindtap="selectPackage"
+        data-amount="{{item.amount}}"
+      >
+        <view class="package-top">
+          <text class="package-amount">{{item.amount}}</text>
+          <text class="package-unit">次</text>
+        </view>
+        <view class="package-bottom">
+          <text class="package-price">¥{{item.price}}</text>
+          <text wx:if="{{item.gift}}" class="package-gift">送{{item.gift}}次</text>
+        </view>
+        <view wx:if="{{item.popular}}" class="popular-tag">超值</view>
+      </view>
+    </view>
+    <button class="recharge-btn {{!selectedPackage ? 'disabled' : ''}}" bindtap="doRecharge" disabled="{{!selectedPackage}}">
+      立即充值 {{selectedPackage ? '¥' + getPackagePrice(selectedPackage) : ''}}
+    </button>
+  </view>
+
+  <!-- 创作统计 -->
+  <view class="section stats-section">
+    <view class="section-header">
+      <text class="section-title">创作统计</text>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-num">{{stats.total}}</text>
+        <text class="stat-label">总创作</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.completed}}</text>
+        <text class="stat-label">已完成</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.monthly}}</text>
+        <text class="stat-label">本月</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="section menu-section">
+    <view class="menu-item" bindtap="goHelp">
+      <text class="menu-icon">❓</text>
+      <text class="menu-text">使用帮助</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goAbout">
+      <text class="menu-icon">ℹ️</text>
+      <text class="menu-text">关于我们</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="contactService">
+      <text class="menu-icon">📞</text>
+      <text class="menu-text">联系客服</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text>音乐创作 v1.0.0</text>
+  </view>
+</view>

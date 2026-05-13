@@ -1,0 +1,77 @@
+<view class="container">
+  <!-- 顶部 Header -->
+  <view class="header">
+    <view class="logo-section">
+      <text class="logo-text">🎵</text>
+      <view class="title-group">
+        <text class="main-title">音乐创作</text>
+        <text class="sub-title">人人皆可创作音乐</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用户信息栏 -->
+  <view class="user-bar" bindtap="goUser">
+    <view class="user-avatar">
+      <text>{{userInfo.nickname || '用户'}}</text>
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickname || '游客'}}</text>
+      <text class="user-credits">剩余 {{totalCredits}} 次创作机会</text>
+    </view>
+    <text class="arrow">›</text>
+  </view>
+
+  <!-- 分类 Tab -->
+  <view class="category-tabs">
+    <scroll-view scroll-x class="tabs-scroll">
+      <view wx:for="{{categories}}" wx:key="name"
+            class="tab {{activeCategory === item.name ? 'active' : ''}}"
+            bindtap="switchCategory"
+            data-category="{{item.name}}">
+        <text class="tab-icon">{{item.icon}}</text>
+        <text class="tab-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 示例列表 -->
+  <scroll-view scroll-y class="example-list" enhanced show-scrollbar="false">
+    <view class="example-grid">
+      <view wx:for="{{currentExamples}}" wx:key="id" class="example-card">
+        <view class="card-header">
+          <text class="card-icon">{{item.icon}}</text>
+          <view class="card-title-group">
+            <text class="card-name">{{item.name}}</text>
+            <text class="card-category">{{item.category}}</text>
+          </view>
+        </view>
+        <text class="card-prompt">{{item.prompt}}</text>
+        <view class="card-tags">
+          <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+        </view>
+        <button class="use-btn" bindtap="useExample" data-example="{{item}}">
+          使用此示例
+        </button>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{currentExamples.length === 0}}" class="empty-state">
+      <text class="empty-icon">🎶</text>
+      <text class="empty-text">该分类下暂无示例</text>
+    </view>
+  </scroll-view>
+
+  <!-- 底部快捷入口 -->
+  <view class="bottom-bar">
+    <button class="create-btn" bindtap="goCreate">
+      <text class="btn-icon">🎵</text>
+      <text>开始创作</text>
+    </button>
+    <button class="library-btn" bindtap="goLibrary">
+      <text class="btn-icon">🎧</text>
+      <text>我的曲库</text>
+    </button>
+  </view>
+</view>

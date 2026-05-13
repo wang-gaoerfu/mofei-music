@@ -1,0 +1,12 @@
+<view class="tag-selector">
+  <view
+    wx:for="{{tags}}"
+    wx:key="name"
+    class="tag-item {{selected.includes(item.name) ? 'selected' : ''}}"
+    bindtap="onTap"
+    data-tag="{{item.name}}"
+  >
+    <text class="tag-icon">{{item.icon}}</text>
+    <text class="tag-name">{{item.name}}</text>
+  </view>
+</view>

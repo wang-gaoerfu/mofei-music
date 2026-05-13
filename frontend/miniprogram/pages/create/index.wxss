@@ -1,0 +1,342 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8f9ff 0%, #eef0ff 100%);
+  padding-bottom: 240rpx;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 页面标题 */
+.page-header {
+  padding: 40rpx 30rpx 10rpx;
+}
+
+.page-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #333;
+  display: block;
+}
+
+.page-subtitle {
+  font-size: 26rpx;
+  color: #999;
+  margin-top: 8rpx;
+  display: block;
+}
+
+/* 表单区域 */
+.form-section {
+  padding: 20rpx 30rpx;
+}
+
+.input-group {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(102,126,234,0.08);
+}
+
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+
+.label-icon {
+  font-size: 30rpx;
+}
+
+.required {
+  color: #ff4d4f;
+}
+
+.input-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2rpx solid #eee;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.6;
+  background: #fafafa;
+  min-height: 160rpx;
+  transition: all 0.3s;
+}
+
+.input-textarea:focus {
+  border-color: #667eea;
+  background: #fff;
+}
+
+.lyrics-input {
+  min-height: 200rpx;
+}
+
+.char-count {
+  font-size: 22rpx;
+  color: #bbb;
+  text-align: right;
+  margin-top: 8rpx;
+}
+
+/* 风格标签 */
+.tag-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.style-tag {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 14rpx 24rpx;
+  border-radius: 50rpx;
+  background: #f5f5f5;
+  font-size: 26rpx;
+  color: #666;
+  transition: all 0.3s;
+  border: 2rpx solid transparent;
+}
+
+.style-tag.selected {
+  background: linear-gradient(135deg, #667eea22, #764ba222);
+  color: #667eea;
+  border-color: #667eea;
+}
+
+.tag-icon {
+  font-size: 28rpx;
+}
+
+/* 乐器选择 */
+.instrument-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+}
+
+.instrument-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 10rpx;
+  border-radius: 12rpx;
+  background: #f5f5f5;
+  transition: all 0.3s;
+  border: 2rpx solid transparent;
+}
+
+.instrument-item.selected {
+  background: linear-gradient(135deg, #667eea22, #764ba222);
+  border-color: #667eea;
+}
+
+.instrument-icon {
+  font-size: 40rpx;
+  margin-bottom: 8rpx;
+}
+
+.instrument-name {
+  font-size: 22rpx;
+  color: #666;
+}
+
+.instrument-item.selected .instrument-name {
+  color: #667eea;
+}
+
+/* 速度选择 */
+.speed-selector {
+  display: flex;
+  gap: 16rpx;
+}
+
+.speed-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  background: #f5f5f5;
+  transition: all 0.3s;
+  border: 2rpx solid transparent;
+}
+
+.speed-item.selected {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+}
+
+.speed-bpm {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.speed-item.selected .speed-bpm {
+  color: #fff;
+}
+
+.speed-name {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+.speed-item.selected .speed-name {
+  color: rgba(255,255,255,0.8);
+}
+
+/* 生成状态 */
+.generating-section {
+  padding: 0 30rpx 20rpx;
+}
+
+.generating-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(102,126,234,0.15);
+}
+
+.generating-icon {
+  position: relative;
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: 24rpx;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  animation: pulse 1.5s ease-out infinite;
+}
+
+.pulse-dot {
+  position: absolute;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.generating-info {
+  flex: 1;
+}
+
+.generating-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+}
+
+.generating-progress {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+  display: block;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8rpx;
+  background: #eee;
+  border-radius: 4rpx;
+  margin-top: 12rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 4rpx;
+  transition: width 0.3s;
+}
+
+/* 播放器区域 */
+.player-section {
+  padding: 0 30rpx 20rpx;
+}
+
+/* 提交按钮 */
+.submit-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 30rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4rpx 20rpx rgba(0,0,0,0.08);
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 26rpx 0;
+  box-shadow: 0 4rpx 20rpx rgba(102,126,234,0.4);
+}
+
+.submit-btn.disabled {
+  background: #ccc;
+  box-shadow: none;
+}
+
+.submit-btn::after {
+  border: none;
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+.loading-spinner {
+  width: 36rpx;
+  height: 36rpx;
+  border: 4rpx solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.submit-hint {
+  display: block;
+  text-align: center;
+  font-size: 22rpx;
+  color: #bbb;
+  margin-top: 12rpx;
+}

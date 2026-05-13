@@ -1,0 +1,89 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">我的曲库</text>
+    <text class="page-subtitle">共 {{totalCount}} 首作品</text>
+  </view>
+
+  <!-- 筛选 Tab -->
+  <view class="filter-tabs">
+    <view
+      wx:for="{{statusFilters}}"
+      wx:key="value"
+      class="filter-tab {{activeFilter === item.value ? 'active' : ''}}"
+      bindtap="switchFilter"
+      data-filter="{{item.value}}"
+    >
+      {{item.name}}
+    </view>
+  </view>
+
+  <!-- 音乐列表 -->
+  <scroll-view
+    scroll-y
+    class="music-list"
+    bindscrolltolower="loadMore"
+    enhanced
+    show-scrollbar="false"
+  >
+    <view wx:for="{{musicList}}" wx:key="uuid" class="music-item">
+      <!-- 左侧：音乐信息 -->
+      <view class="music-info" bindtap="playMusic" data-music="{{item}}">
+        <view class="music-cover">
+          <text class="cover-icon">{{getStatusIcon(item.status)}}</text>
+          <view wx:if="{{item.status === 'generating'}}" class="generating-overlay">
+            <view class="generating-dot"></view>
+          </view>
+        </view>
+        <view class="music-detail">
+          <text class="music-title">{{item.title || '未命名作品'}}</text>
+          <view class="music-meta">
+            <text class="music-status status-{{item.status}}">{{getStatusText(item.status)}}</text>
+            <text class="music-time">{{item.created_at}}</text>
+          </view>
+          <view wx:if="{{item.tags}}" class="music-tags">
+            <text wx:for="{{item.tags}}" wx:key="*this" class="mini-tag">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 右侧：操作按钮 -->
+      <view class="music-actions">
+        <view wx:if="{{item.status === 'completed'}}" class="action-btn" bindtap="downloadMusic" data-uuid="{{item.uuid}}">
+          <text>📥</text>
+        </view>
+        <view class="action-btn" bindtap="deleteMusic" data-uuid="{{item.uuid}}">
+          <text>🗑️</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{hasMore && musicList.length > 0}}" class="load-more" bindtap="loadMore">
+      <text>{{isLoading ? '加载中...' : '加载更多'}}</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{musicList.length === 0 && !isLoading}}" class="empty-state">
+      <text class="empty-icon">🎶</text>
+      <text class="empty-text">暂无作品</text>
+      <text class="empty-hint">开始创作你的第一首音乐吧</text>
+      <button class="start-create-btn" bindtap="goCreate">开始创作</button>
+    </view>
+
+    <!-- 加载中 -->
+    <view wx:if="{{isLoading && musicList.length === 0}}" class="loading-state">
+      <view class="loading-spinner"></view>
+      <text>加载中...</text>
+    </view>
+  </scroll-view>
+
+  <!-- 正在播放浮层 -->
+  <view wx:if="{{currentPlaying}}" class="playing-float" bindtap="openPlayer">
+    <view class="float-left">
+      <text class="float-icon">🎵</text>
+      <text class="float-title">{{currentPlaying.title}}</text>
+    </view>
+    <text class="float-status">播放中</text>
+  </view>
+</view>

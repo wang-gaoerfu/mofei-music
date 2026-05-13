@@ -1,0 +1,151 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">开始创作</text>
+    <text class="page-subtitle">描述你想要的音乐，我来为你生成</text>
+  </view>
+
+  <!-- 创作表单 -->
+  <view class="form-section">
+    <!-- 音乐描述 -->
+    <view class="input-group">
+      <view class="input-label">
+        <text class="label-icon">📝</text>
+        <text>音乐描述</text>
+        <text class="required">*</text>
+      </view>
+      <textarea
+        class="input-textarea"
+        placeholder="描述你想要的音乐，例如：欢快的电子音乐，适合派对"
+        value="{{prompt}}"
+        bindinput="onPromptInput"
+        maxlength="500"
+        auto-height
+      />
+      <text class="char-count">{{prompt.length}}/500</text>
+    </view>
+
+    <!-- 风格标签 -->
+    <view class="input-group">
+      <view class="input-label">
+        <text class="label-icon">🎨</text>
+        <text>风格标签</text>
+      </view>
+      <view class="tag-selector">
+        <view
+          wx:for="{{styleTags}}"
+          wx:key="name"
+          class="style-tag {{selectedStyles.includes(item.name) ? 'selected' : ''}}"
+          bindtap="toggleStyle"
+          data-style="{{item.name}}"
+        >
+          <text class="tag-icon">{{item.icon}}</text>
+          <text>{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 乐器选择 -->
+    <view class="input-group">
+      <view class="input-label">
+        <text class="label-icon">🎸</text>
+        <text>乐器选择</text>
+      </view>
+      <view class="instrument-grid">
+        <view
+          wx:for="{{instruments}}"
+          wx:key="name"
+          class="instrument-item {{selectedInstrument === item.name ? 'selected' : ''}}"
+          bindtap="selectInstrument"
+          data-instrument="{{item.name}}"
+        >
+          <text class="instrument-icon">{{item.icon}}</text>
+          <text class="instrument-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 速度选择 -->
+    <view class="input-group">
+      <view class="input-label">
+        <text class="label-icon">⚡</text>
+        <text>音乐速度</text>
+      </view>
+      <view class="speed-selector">
+        <view
+          wx:for="{{speeds}}"
+          wx:key="name"
+          class="speed-item {{selectedSpeed === item.name ? 'selected' : ''}}"
+          bindtap="selectSpeed"
+          data-speed="{{item.name}}"
+        >
+          <text class="speed-bpm">{{item.bpm}}</text>
+          <text class="speed-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 歌词输入（可选） -->
+    <view class="input-group">
+      <view class="input-label">
+        <text class="label-icon">📄</text>
+        <text>歌词（可选）</text>
+      </view>
+      <textarea
+        class="input-textarea lyrics-input"
+        placeholder="如果你有歌词，可以在这里输入..."
+        value="{{lyrics}}"
+        bindinput="onLyricsInput"
+        maxlength="2000"
+        auto-height
+      />
+    </view>
+  </view>
+
+  <!-- 生成状态 -->
+  <view wx:if="{{isGenerating}}" class="generating-section">
+    <view class="generating-card">
+      <view class="generating-icon">
+        <view class="pulse-ring"></view>
+        <text class="pulse-dot">🎵</text>
+      </view>
+      <view class="generating-info">
+        <text class="generating-title">{{generatingTitle}}</text>
+        <text class="generating-progress">生成进度：{{progress}}%</text>
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{progress}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 播放器（生成完成后） -->
+  <block wx:if="{{showPlayer && generatedMusic}}">
+    <view class="player-section">
+      <component-music-player
+        id="mainPlayer"
+        title="{{generatedMusic.title}}"
+        src="{{generatedMusic.url}}"
+        uuid="{{generatedMusic.uuid}}"
+        bind:download="onDownload"
+        bind:regenerate="onRegenerate"
+      />
+    </view>
+  </block>
+
+  <!-- 生成按钮 -->
+  <view class="submit-section">
+    <button
+      class="submit-btn {{isGenerating ? 'disabled' : ''}}"
+      bindtap="onSubmit"
+      disabled="{{isGenerating || !prompt}}"
+    >
+      <text wx:if="{{!isGenerating}}">🎵 开始生成</text>
+      <view wx:else class="btn-loading">
+        <view class="loading-spinner"></view>
+        <text>生成中...</text>
+      </view>
+    </button>
+    <text class="submit-hint">消耗 1 次创作机会</text>
+  </view>
+</view>

@@ -1,0 +1,73 @@
+.example-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(102,126,234,0.08);
+}
+
+.card-icon {
+  font-size: 48rpx;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea22, #764ba222);
+  border-radius: 16rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+}
+
+.card-prompt {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 6rpx;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-top: 10rpx;
+}
+
+.tag {
+  font-size: 20rpx;
+  color: #667eea;
+  background: #667eea11;
+  padding: 4rpx 12rpx;
+  border-radius: 10rpx;
+}
+
+.card-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  font-size: 24rpx;
+  padding: 14rpx 28rpx;
+  margin-left: 16rpx;
+}
+
+.card-btn::after {
+  border: none;
+}

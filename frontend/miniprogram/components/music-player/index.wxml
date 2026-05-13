@@ -1,0 +1,59 @@
+<view class="player">
+  <!-- 标题 -->
+  <view class="player-header">
+    <text class="player-icon">🎵</text>
+    <text class="player-title">{{title}}</text>
+  </view>
+
+  <!-- 封面 + 控制 -->
+  <view class="player-main">
+    <!-- 封面 -->
+    <view class="cover-section">
+      <view class="cover {{isPlaying ? 'spinning' : ''}}">
+        <text class="cover-icon">🎶</text>
+      </view>
+    </view>
+
+    <!-- 进度条 -->
+    <view class="progress-section">
+      <slider
+        class="progress-slider"
+        value="{{currentTime}}"
+        max="{{duration}}"
+        bindchange="onSeek"
+        bindchanging="onSeekChanging"
+        selected-color="#667eea"
+        block-size="14"
+      />
+      <view class="time-display">
+        <text class="time-text">{{formatTime(currentTime)}}</text>
+        <text class="time-text">{{formatTime(duration)}}</text>
+      </view>
+    </view>
+
+    <!-- 控制按钮 -->
+    <view class="controls-section">
+      <view class="control-btn prev-btn" bindtap="onPrev">
+        <text class="control-icon">⏮</text>
+      </view>
+      <view class="control-btn play-btn" bindtap="onTogglePlay">
+        <text class="control-icon play-icon">{{isPlaying ? '⏸' : '▶️'}}</text>
+      </view>
+      <view class="control-btn next-btn" bindtap="onNext">
+        <text class="control-icon">⏭</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="actions-section">
+      <view class="action-btn" bindtap="onDownload">
+        <text class="action-icon">📥</text>
+        <text class="action-text">下载</text>
+      </view>
+      <view class="action-btn" bindtap="onRegenerate">
+        <text class="action-icon">🔄</text>
+        <text class="action-text">重新生成</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,294 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8f9ff 0%, #eef0ff 100%);
+  padding-bottom: 40rpx;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 用户卡片 */
+.user-card {
+  position: relative;
+  margin: 20rpx 30rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 30rpx rgba(102,126,234,0.15);
+}
+
+.user-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 160rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.user-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 40rpx 30rpx 30rpx;
+  background: #fff;
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 20rpx rgba(102,126,234,0.3);
+}
+
+.avatar-icon {
+  font-size: 48rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-detail {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #333;
+  display: block;
+}
+
+.user-id {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 6rpx;
+  display: block;
+}
+
+/* 创作次数卡片 */
+.credits-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  margin: 20rpx 30rpx;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(102,126,234,0.1);
+}
+
+.credit-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.credit-num {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.credit-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 6rpx;
+}
+
+.credit-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: #eee;
+}
+
+/* 通用区块 */
+.section {
+  background: #fff;
+  margin: 20rpx 30rpx;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(102,126,234,0.08);
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.section-hint {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 充值套餐 */
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-bottom: 24rpx;
+}
+
+.package-item {
+  position: relative;
+  background: #f8f9ff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.3s;
+}
+
+.package-item.selected {
+  background: linear-gradient(135deg, #667eea11, #764ba211);
+  border-color: #667eea;
+}
+
+.package-top {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+.package-amount {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.package-unit {
+  font-size: 24rpx;
+  color: #667eea;
+}
+
+.package-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8rpx;
+}
+
+.package-price {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.package-gift {
+  font-size: 20rpx;
+  color: #fff;
+  background: #ff6b6b;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.popular-tag {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(255,107,107,0.3);
+}
+
+.recharge-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 24rpx 0;
+  box-shadow: 0 4rpx 20rpx rgba(102,126,234,0.4);
+}
+
+.recharge-btn.disabled {
+  background: #ccc;
+  box-shadow: none;
+}
+
+.recharge-btn::after {
+  border: none;
+}
+
+/* 创作统计 */
+.stats-grid {
+  display: flex;
+  justify-content: space-around;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 6rpx;
+}
+
+/* 功能列表 */
+.menu-section {
+  padding: 0;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+  transition: background 0.2s;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background: #f8f9ff;
+}
+
+.menu-icon {
+  font-size: 32rpx;
+  margin-right: 20rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.menu-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+/* 版本信息 */
+.version-info {
+  text-align: center;
+  padding: 30rpx;
+  font-size: 22rpx;
+  color: #bbb;
+}
