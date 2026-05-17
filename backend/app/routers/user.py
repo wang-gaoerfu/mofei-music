@@ -47,16 +47,18 @@ def register(req: RegisterRequest, session: Session = Depends(get_session)):
                 "id": user.id,
                 "nickname": user.nickname,
                 "free_count": user.free_count,
-                "balance": user.balance
+                "balance": user.balance,
+                "total_earnings": user.total_earnings
             }
         )
 
-    # 新用户注册
+    # 新用户注册（免费创作，无需初始次数）
     user = User(
         openid=req.openid,
         nickname=req.nickname or "用户",
-        free_count=3,  # 注册送3次
-        balance=0
+        free_count=0,  # 创作免费，不再送次数
+        balance=0.0,
+        total_earnings=0.0
     )
     session.add(user)
     session.commit()
@@ -69,7 +71,8 @@ def register(req: RegisterRequest, session: Session = Depends(get_session)):
             "id": user.id,
             "nickname": user.nickname,
             "free_count": user.free_count,
-            "balance": user.balance
+            "balance": user.balance,
+            "total_earnings": user.total_earnings
         }
     )
 
@@ -82,6 +85,7 @@ def get_user_info(current_user: User = Depends(get_current_user)):
         "nickname": current_user.nickname,
         "free_count": current_user.free_count,
         "balance": current_user.balance,
+        "total_earnings": current_user.total_earnings,
         "created_at": current_user.created_at
     }
 
@@ -101,5 +105,6 @@ def update_user(
         "id": current_user.id,
         "nickname": current_user.nickname,
         "free_count": current_user.free_count,
-        "balance": current_user.balance
+        "balance": current_user.balance,
+        "total_earnings": current_user.total_earnings
     }

@@ -94,22 +94,7 @@ Page({
 
     if (isGenerating) return
 
-    // 检查次数
-    const userInfo = auth.getUserInfo()
-    const totalCredits = (userInfo?.free_count || 0) + (userInfo?.balance || 0)
-    if (totalCredits <= 0) {
-      wx.showModal({
-        title: '创作次数不足',
-        content: '您的创作次数已用完，请先充值',
-        confirmText: '去充值',
-        success: (res) => {
-          if (res.confirm) {
-            wx.switchTab({ url: '/pages/user/index' })
-          }
-        }
-      })
-      return
-    }
+    // 创作免费，不再检查次数
 
     this.setData({
       isGenerating: true,

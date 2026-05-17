@@ -13,29 +13,24 @@
     </view>
   </view>
 
-  <!-- 创作次数 -->
+  <!-- 账户信息 -->
   <view class="credits-card">
     <view class="credit-item">
-      <text class="credit-num">{{userInfo.free_count || 0}}</text>
-      <text class="credit-label">免费次数</text>
+      <text class="credit-num">{{balance}}</text>
+      <text class="credit-label">下载余额</text>
     </view>
     <view class="credit-divider"></view>
     <view class="credit-item">
-      <text class="credit-num">{{userInfo.balance || 0}}</text>
-      <text class="credit-label">余额</text>
-    </view>
-    <view class="credit-divider"></view>
-    <view class="credit-item">
-      <text class="credit-num">{{totalCredits}}</text>
-      <text class="credit-label">总计可用</text>
+      <text class="credit-num">{{totalEarnings}}</text>
+      <text class="credit-label">我的收益</text>
     </view>
   </view>
 
   <!-- 充值套餐 -->
   <view class="section recharge-section">
     <view class="section-header">
-      <text class="section-title">充值套餐</text>
-      <text class="section-hint">更多次数更低价格</text>
+      <text class="section-title">充值下载次数</text>
+      <text class="section-hint">下载他入歌曲 ¥1/首</text>
     </view>
     <view class="package-grid">
       <view
@@ -53,7 +48,7 @@
           <text class="package-price">¥{{item.price}}</text>
           <text wx:if="{{item.gift}}" class="package-gift">送{{item.gift}}次</text>
         </view>
-        <view wx:if="{{item.popular}}" class="popular-tag">超值</view>
+        <view wx:if="{{item.popular}}" class="popular-tag">推荐</view>
       </view>
     </view>
     <button class="recharge-btn {{!selectedPackage ? 'disabled' : ''}}" bindtap="doRecharge" disabled="{{!selectedPackage}}">
@@ -64,7 +59,7 @@
   <!-- 创作统计 -->
   <view class="section stats-section">
     <view class="section-header">
-      <text class="section-title">创作统计</text>
+      <text class="section-title">我的创作</text>
     </view>
     <view class="stats-grid">
       <view class="stat-item">
@@ -72,12 +67,12 @@
         <text class="stat-label">总创作</text>
       </view>
       <view class="stat-item">
-        <text class="stat-num">{{stats.completed}}</text>
-        <text class="stat-label">已完成</text>
+        <text class="stat-num">{{stats.published}}</text>
+        <text class="stat-label">已发布</text>
       </view>
       <view class="stat-item">
-        <text class="stat-num">{{stats.monthly}}</text>
-        <text class="stat-label">本月</text>
+        <text class="stat-num">{{stats.earnings}}</text>
+        <text class="stat-label">已收益</text>
       </view>
     </view>
   </view>

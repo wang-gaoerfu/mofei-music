@@ -39,20 +39,34 @@
           <text class="music-title">{{item.title || '未命名作品'}}</text>
           <view class="music-meta">
             <text class="music-status status-{{item.status}}">{{getStatusText(item.status)}}</text>
+            <text wx:if="{{item.is_published}}" class="published-tag">已发布</text>
             <text class="music-time">{{item.created_at}}</text>
           </view>
-          <view wx:if="{{item.tags}}" class="music-tags">
-            <text wx:for="{{item.tags}}" wx:key="*this" class="mini-tag">{{item}}</text>
+          <view wx:if="{{item.download_count > 0}}" class="music-stats">
+            <text class="stat-text">📥 {{item.download_count}}次下载</text>
           </view>
         </view>
       </view>
 
       <!-- 右侧：操作按钮 -->
       <view class="music-actions">
-        <view wx:if="{{item.status === 'completed'}}" class="action-btn" bindtap="downloadMusic" data-uuid="{{item.uuid}}">
+        <!-- 已完成的音乐 -->
+        <view wx:if="{{item.status === 'completed'}}">
+          <!-- 未发布 → 显示发布按钮 -->
+          <view wx:if="{{!item.is_published}}" class="action-btn primary" bindtap="publishMusic" data-uuid="{{item.uuid}}">
+            <text>发布</text>
+          </view>
+          <!-- 已发布 → 显示取消发布 + 下载 -->
+          <view wx:else>
+            <view class="action-btn" bindtap="unpublishMusic" data-uuid="{{item.uuid}}">
+              <text>下架</text>
+            </view>
+          </view>
+        </view>
+        <view class="action-btn" bindtap="downloadMusic" data-uuid="{{item.uuid}}">
           <text>📥</text>
         </view>
-        <view class="action-btn" bindtap="deleteMusic" data-uuid="{{item.uuid}}">
+        <view class="action-btn danger" bindtap="deleteMusic" data-uuid="{{item.uuid}}">
           <text>🗑️</text>
         </view>
       </view>

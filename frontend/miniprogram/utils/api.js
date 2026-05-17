@@ -64,6 +64,12 @@ module.exports = {
 
   downloadMusic: (uuid) => `${API_BASE}/music/download/${uuid}`,
 
+  publishMusic: (uuid) => request(`/music/publish/${uuid}`, { method: 'POST' }),
+
+  unpublishMusic: (uuid) => request(`/music/unpublish/${uuid}`, { method: 'POST' }),
+
+  getPublicLibrary: (page = 1) => request(`/music/public/list?page=${page}`),
+
   // 示例相关
   getExamples: () => request('/examples'),
 

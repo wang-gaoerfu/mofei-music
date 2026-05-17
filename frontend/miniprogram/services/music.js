@@ -82,10 +82,28 @@ function downloadMusic(uuid) {
   })
 }
 
+// 发布音乐到公共曲库
+function publishMusic(uuid) {
+  return api.publishMusic(uuid)
+}
+
+// 从公共曲库下架
+function unpublishMusic(uuid) {
+  return api.unpublishMusic(uuid)
+}
+
+// 获取公共曲库
+function getPublicLibrary(page = 1) {
+  return api.getPublicLibrary(page)
+}
+
 module.exports = {
   createMusicTask,
   pollMusicStatus,
   getMusicList,
   getMusicDetail,
-  downloadMusic
+  downloadMusic,
+  publishMusic,
+  unpublishMusic,
+  getPublicLibrary
 }

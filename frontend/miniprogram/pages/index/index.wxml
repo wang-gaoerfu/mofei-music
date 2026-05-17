@@ -5,7 +5,7 @@
       <text class="logo-text">🎵</text>
       <view class="title-group">
         <text class="main-title">音乐创作</text>
-        <text class="sub-title">人人皆可创作音乐</text>
+        <text class="sub-title">免费创作 · 下载付费</text>
       </view>
     </view>
   </view>
@@ -17,7 +17,7 @@
     </view>
     <view class="user-info">
       <text class="user-name">{{userInfo.nickname || '游客'}}</text>
-      <text class="user-credits">剩余 {{totalCredits}} 次创作机会</text>
+      <text class="user-credits">下载余额 {{balance}} 次</text>
     </view>
     <text class="arrow">›</text>
   </view>
@@ -25,41 +25,50 @@
   <!-- 分类 Tab -->
   <view class="category-tabs">
     <scroll-view scroll-x class="tabs-scroll">
-      <view wx:for="{{categories}}" wx:key="name"
-            class="tab {{activeCategory === item.name ? 'active' : ''}}"
+      <view wx:for="{{categories}}" wx:key="value"
+            class="tab {{activeCategory === item.value ? 'active' : ''}}"
             bindtap="switchCategory"
-            data-category="{{item.name}}">
-        <text class="tab-icon">{{item.icon}}</text>
+            data-value="{{item.value}}">
         <text class="tab-name">{{item.name}}</text>
       </view>
     </scroll-view>
   </view>
 
-  <!-- 示例列表 -->
-  <scroll-view scroll-y class="example-list" enhanced show-scrollbar="false">
-    <view class="example-grid">
-      <view wx:for="{{currentExamples}}" wx:key="id" class="example-card">
-        <view class="card-header">
-          <text class="card-icon">{{item.icon}}</text>
-          <view class="card-title-group">
-            <text class="card-name">{{item.name}}</text>
-            <text class="card-category">{{item.category}}</text>
+  <!-- 公共曲库列表 -->
+  <scroll-view scroll-y class="music-list" enhanced show-scrollbar="false" bindscrolltolower="loadMore">
+    <view wx:if="{{publicList.length > 0}}">
+      <view wx:for="{{publicList}}" wx:key="uuid" class="music-item">
+        <view class="music-cover" bindtap="playMusic" data-music="{{item}}">
+          <text class="cover-icon">🎵</text>
+        </view>
+        <view class="music-info">
+          <text class="music-title">{{item.title}}</text>
+          <text class="music-author">@{{item.author_nickname}}</text>
+          <view class="music-meta">
+            <text class="download-count">📥 {{item.download_count}}</text>
           </view>
         </view>
-        <text class="card-prompt">{{item.prompt}}</text>
-        <view class="card-tags">
-          <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+        <view class="music-actions">
+          <button class="play-btn" bindtap="playMusic" data-music="{{item}}">▶</button>
+          <button class="download-btn" bindtap="downloadMusic" data-uuid="{{item.uuid}}" data-music="{{item}}">下载</button>
         </view>
-        <button class="use-btn" bindtap="useExample" data-example="{{item}}">
-          使用此示例
-        </button>
       </view>
     </view>
 
     <!-- 空状态 -->
-    <view wx:if="{{currentExamples.length === 0}}" class="empty-state">
+    <view wx:if="{{publicList.length === 0 && !isLoading}}" class="empty-state">
       <text class="empty-icon">🎶</text>
-      <text class="empty-text">该分类下暂无示例</text>
+      <text class="empty-text">公共曲库为空</text>
+      <text class="empty-hint">成为第一个发布歌曲的人吧！</text>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{isLoading}}" class="loading-more">
+      <text>加载中...</text>
+    </view>
+
+    <view wx:if="{{!hasMore && publicList.length > 0}}" class="no-more">
+      <text>— 没有更多了 —</text>
     </view>
   </scroll-view>
 

@@ -1,22 +1,24 @@
-// pages/user/index.js
 const api = require('../../utils/api.js')
 const auth = require('../../utils/auth.js')
 
 Page({
   data: {
     userInfo: null,
-    totalCredits: 0,
+    balance: 0,
+    totalEarnings: 0,
     selectedPackage: null,
+    // 下载充值套餐（1元=1次下载）
     rechargePackages: [
-      { amount: 10, price: 9.9, gift: 0, popular: false },
-      { amount: 30, price: 25, gift: 5, popular: true },
-      { amount: 50, price: 38, gift: 12, popular: false },
-      { amount: 100, price: 68, gift: 32, popular: false }
+      { amount: 5, price: 5, popular: false },
+      { amount: 10, price: 9.9, popular: true },
+      { amount: 20, price: 18, gift: 2, popular: false },
+      { amount: 50, price: 45, gift: 5, popular: false }
     ],
     stats: {
       total: 0,
       completed: 0,
-      monthly: 0
+      published: 0,
+      earnings: 0
     }
   },
 
@@ -34,7 +36,8 @@ Page({
     if (userInfo) {
       this.setData({
         userInfo,
-        totalCredits: (userInfo.free_count || 0) + (userInfo.balance || 0)
+        balance: userInfo.balance || 0,
+        totalEarnings: userInfo.total_earnings || 0
       })
     }
 
@@ -42,26 +45,27 @@ Page({
       auth.setUserInfo(res)
       this.setData({
         userInfo: res,
-        totalCredits: (res.free_count || 0) + (res.balance || 0)
+        balance: res.balance || 0,
+        totalEarnings: res.total_earnings || 0
       })
     }).catch(() => {})
   },
 
   loadStats() {
-    // 从曲库 API 获取统计数据
     api.getMusicList(1, 1).then(res => {
-      // 如果后端返回总数统计
       this.setData({
-        'stats.total': res.total || 0,
-        'stats.completed': res.completed || 0,
-        'stats.monthly': res.monthly || 0
+        'stats.total': res.total || 0
       })
     }).catch(() => {})
   },
 
   selectPackage(e) {
     const amount = e.currentTarget.dataset.amount
-    this.setData({ selectedPackage: amount })
+    const pkg = this.data.rechargePackages.find(p => p.amount === amount)
+    this.setData({ 
+      selectedPackage: amount,
+      selectedPrice: pkg ? pkg.price : 0
+    })
   },
 
   getPackagePrice(amount) {
@@ -71,14 +75,17 @@ Page({
 
   doRecharge() {
     const { selectedPackage } = this.data
-    if (!selectedPackage) return
+    if (!selectedPackage) {
+      wx.showToast({ title: '请选择套餐', icon: 'none' })
+      return
+    }
 
     const pkg = this.data.rechargePackages.find(p => p.amount === selectedPackage)
     if (!pkg) return
 
     wx.showModal({
       title: '确认充值',
-      content: `确认充值 ${pkg.amount} 次，支付 ¥${pkg.price}？`,
+      content: `确认充值 ${pkg.amount} 次下载，支付 ¥${pkg.price}？`,
       success: (res) => {
         if (res.confirm) {
           // TODO: 调用微信支付
@@ -98,7 +105,7 @@ Page({
   goAbout() {
     wx.showModal({
       title: '关于我们',
-      content: '音乐创作是一款 AI 音乐生成工具，让每个人都能轻松创作音乐。\n\n版本：v1.0.0',
+      content: '音乐创作是一款 AI 音乐生成工具，让每个人都能轻松创作音乐。\\n\\n• 创作免费\\n• 发布到曲库供他人下载可获得收益\\n• 下载他人歌曲仅需 1 元/首\\n\\n版本：v1.0.0',
       showCancel: false
     })
   },

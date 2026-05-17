@@ -1,5 +1,6 @@
 // pages/library/index.js
 const musicService = require('../../services/music.js')
+const api = require('../../utils/api.js')
 const auth = require('../../utils/auth.js')
 
 Page({
@@ -97,6 +98,55 @@ Page({
     })
   },
 
+  publishMusic(e) {
+    const uuid = e.currentTarget.dataset.uuid
+    wx.showModal({
+      title: '发布到公共曲库',
+      content: '发布后，其他用户可以试听和下载（¥1/首），你的收益将自动累积',
+      success: (res) => {
+        if (res.confirm) {
+          musicService.publishMusic(uuid).then(() => {
+            wx.showToast({ title: '发布成功', icon: 'success' })
+            // 更新列表中的状态
+            const musicList = this.data.musicList.map(m => {
+              if (m.uuid === uuid) {
+                return { ...m, is_published: true }
+              }
+              return m
+            })
+            this.setData({ musicList })
+          }).catch(() => {
+            wx.showToast({ title: '发布失败', icon: 'none' })
+          })
+        }
+      }
+    })
+  },
+
+  unpublishMusic(e) {
+    const uuid = e.currentTarget.dataset.uuid
+    wx.showModal({
+      title: '下架歌曲',
+      content: '下架后，其他用户将无法再访问这首歌曲',
+      success: (res) => {
+        if (res.confirm) {
+          musicService.unpublishMusic(uuid).then(() => {
+            wx.showToast({ title: '已下架', icon: 'success' })
+            const musicList = this.data.musicList.map(m => {
+              if (m.uuid === uuid) {
+                return { ...m, is_published: false }
+              }
+              return m
+            })
+            this.setData({ musicList })
+          }).catch(() => {
+            wx.showToast({ title: '下架失败', icon: 'none' })
+          })
+        }
+      }
+    })
+  },
+
   downloadMusic(e) {
     const uuid = e.currentTarget.dataset.uuid
     musicService.downloadMusic(uuid)
@@ -108,7 +158,6 @@ Page({
       content: '确定要删除这首音乐吗？',
       success: (res) => {
         if (res.confirm) {
-          // 调用删除 API
           wx.showToast({ title: '删除成功', icon: 'success' })
           this.setData({ currentPage: 1, musicList: [] })
           this.loadMusicList()

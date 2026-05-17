@@ -28,20 +28,7 @@ async def create_music(
 ):
     user_id = current_user.id
 
-    # 检查次数
-    user = session.get(User, user_id)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    if user.free_count <= 0 and user.balance <= 0:
-        raise HTTPException(status_code=400, detail="No credit remaining")
-
-    # 扣减次数
-    if user.free_count > 0:
-        user.free_count -= 1
-    else:
-        user.balance -= 1
-    session.commit()
+    # 创作免费，不再检查次数
 
     # 创建音乐记录
     music_uuid = str(uuid.uuid4())
@@ -155,11 +142,118 @@ def download_music(
     if not music:
         raise HTTPException(status_code=404, detail="Music not found")
 
-    if music.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not your music")
+    # 检查音乐是否发布（只有发布的才能被其他人下载）
+    is_owner = music.user_id == current_user.id
+    if not is_owner and not music.is_published:
+        raise HTTPException(status_code=403, detail="Music not available")
+
+    # 自己是作者 → 免费下载
+    if is_owner:
+        if not music.local_path:
+            raise HTTPException(status_code=404, detail="File not ready")
+        from fastapi.responses import FileResponse
+        return FileResponse(music.local_path, filename=f"{music.title}.mp3", media_type="audio/mpeg")
+
+    # 他人的音乐 → 检查余额并扣费
+    user = session.get(User, current_user.id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user.balance < 1.0:
+        raise HTTPException(status_code=400, detail="Balance insufficient, need 1 yuan to download")
+
+    # 扣费
+    user.balance -= 1.0
+
+    # 歌曲作者增加收益
+    author = session.get(User, music.user_id)
+    if author:
+        author.total_earnings += 1.0
+
+    # 歌曲下载次数+1
+    music.download_count += 1
+
+    session.commit()
 
     if not music.local_path:
         raise HTTPException(status_code=404, detail="File not ready")
 
     from fastapi.responses import FileResponse
     return FileResponse(music.local_path, filename=f"{music.title}.mp3", media_type="audio/mpeg")
+
+
+@router.post("/publish/{music_id}")
+def publish_music(
+    music_id: str,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """将音乐发布到公共曲库"""
+    music = session.exec(select(Music).where(Music.uuid == music_id)).first()
+    if not music:
+        raise HTTPException(status_code=404, detail="Music not found")
+    if music.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not your music")
+    if music.status != "completed":
+        raise HTTPException(status_code=400, detail="Music not ready")
+
+    music.is_published = True
+    session.commit()
+    return {"message": "Published successfully"}
+
+
+@router.post("/unpublish/{music_id}")
+def unpublish_music(
+    music_id: str,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """将音乐从公共曲库下架"""
+    music = session.exec(select(Music).where(Music.uuid == music_id)).first()
+    if not music:
+        raise HTTPException(status_code=404, detail="Music not found")
+    if music.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not your music")
+
+    music.is_published = False
+    session.commit()
+    return {"message": "Unpublished successfully"}
+
+
+@router.get("/public/list")
+def list_public_musics(
+    page: int = 1,
+    size: int = 20,
+    session: Session = Depends(get_session)
+):
+    """公共曲库列表（所有人可访问，无需登录）"""
+    offset = (page - 1) * size
+
+    musics = session.exec(
+        select(Music)
+        .where(Music.is_published == True, Music.status == "completed")
+        .order_by(Music.download_count.desc(), Music.created_at.desc())
+        .offset(offset)
+        .limit(size)
+    ).all()
+
+    total = session.scalar(
+        select(func.count()).where(Music.is_published == True, Music.status == "completed")
+    ) or 0
+
+    # 获取作者信息
+    result = []
+    for m in musics:
+        author = session.get(User, m.user_id)
+        result.append({
+            "uuid": m.uuid,
+            "title": m.title,
+            "prompt": m.prompt,
+            "style_tags": m.style_tags,
+            "audio_url": m.audio_url,
+            "download_count": m.download_count,
+            "created_at": m.created_at,
+            "author_nickname": author.nickname if author else "未知"
+        })
+
+    return {"list": result, "total": total, "page": page, "size": size}
